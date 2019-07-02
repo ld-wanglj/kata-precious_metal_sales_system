@@ -2,7 +2,12 @@ package com.coding.sales;
 
 
 public class CalAmountSum {
-	
+	public static final double BASE_MONEY_MAX =3000;
+	 public static final double BASE_MONEY_MIDDLE =2000;
+	 public static final double BASE_MONEY_MIN =1000;
+	 public static final double DISACOUNT_MAX =350;
+	 public static final double DISACOUNT_MIDDLE =50;
+	 public static final double DISACOUNT_MIN =10;
 	//优惠笔数
 	public static int calDiscountCount(double amountMoney,double discountBase,double discount){
 		int i;
@@ -23,44 +28,44 @@ public class CalAmountSum {
 		}
 		return amountMoneyLess;
 	}
-	//每满3000元减350, 每满2000减30，每满1000减10优惠金额
+	//每满BASE_MONEY_MAX元减DISACOUNT_MAX, 每满BASE_MONEY_MIDDLE减30，每满BASE_MONEY_MIN减DISACOUNT_MIN优惠金额
 	public static double calDiscountmoney12(double amountMoney){
 		double lessAmountMoney=amountMoney;
 		int i=0;
 		int j=0;
 		int k=0;
-		if(lessAmountMoney>=3000){
-			lessAmountMoney=lessAcountMoney(amountMoney,3000,350);
-			i=calDiscountCount(amountMoney,3000,350);
+		if(lessAmountMoney>=BASE_MONEY_MAX){
+			lessAmountMoney=lessAcountMoney(amountMoney,BASE_MONEY_MAX,DISACOUNT_MAX);
+			i=calDiscountCount(amountMoney,BASE_MONEY_MAX,DISACOUNT_MAX);
 		}
-		if(lessAmountMoney>=2000){
-			amountMoney=lessAcountMoney(amountMoney,2000,50);
-			j=calDiscountCount(amountMoney,2000,50);
+		if(lessAmountMoney>=BASE_MONEY_MIDDLE){
+			amountMoney=lessAcountMoney(amountMoney,BASE_MONEY_MIDDLE,DISACOUNT_MIDDLE);
+			j=calDiscountCount(amountMoney,BASE_MONEY_MIDDLE,DISACOUNT_MIDDLE);
 		}
-		if(lessAmountMoney>=1000){
-			amountMoney=lessAcountMoney(amountMoney,1000,10);
-			k=calDiscountCount(amountMoney,1000,10);
+		if(lessAmountMoney>=BASE_MONEY_MIN){
+			amountMoney=lessAcountMoney(amountMoney,BASE_MONEY_MIN,DISACOUNT_MIN);
+			k=calDiscountCount(amountMoney,BASE_MONEY_MIN,DISACOUNT_MIN);
 		}
-		return 350*i+50*j+10*k;
+		return DISACOUNT_MAX*i+DISACOUNT_MIDDLE*j+DISACOUNT_MIN*k;
 	}	
-	//每满2000减30，每满1000减10优惠金额
+	//每满BASE_MONEY_MIDDLE减30，每满BASE_MONEY_MIN减DISACOUNT_MIN优惠金额
 	public static double calDiscountmoney13(double amountMoney){
 		double lessAmountMoney=amountMoney;
 		int j=0;
 		int k=0;
-		if(lessAmountMoney>=2000){
-			j=calDiscountCount(amountMoney,2000,50);
-			lessAmountMoney=lessAcountMoney(lessAmountMoney,2000,50);
+		if(lessAmountMoney>=BASE_MONEY_MIDDLE){
+			j=calDiscountCount(amountMoney,BASE_MONEY_MIDDLE,DISACOUNT_MIDDLE);
+			lessAmountMoney=lessAcountMoney(lessAmountMoney,BASE_MONEY_MIDDLE,DISACOUNT_MIDDLE);
 			
 		}
 		System.out.println(lessAmountMoney);
-		if(lessAmountMoney>=1000){
-			k=calDiscountCount(lessAmountMoney,1000,10);
-			lessAmountMoney=lessAcountMoney(lessAmountMoney,1000,10);
+		if(lessAmountMoney>=BASE_MONEY_MIN){
+			k=calDiscountCount(lessAmountMoney,BASE_MONEY_MIN,DISACOUNT_MIN);
+			lessAmountMoney=lessAcountMoney(lessAmountMoney,BASE_MONEY_MIN,DISACOUNT_MIN);
 			
 		}
-		System.out.println(j+"**"+k+"**"+(50*j+10*k));
-		return 50*j+10*k;
+		System.out.println(j+"**"+k+"**"+(DISACOUNT_MIDDLE*j+DISACOUNT_MIN*k));
+		return DISACOUNT_MIDDLE*j+DISACOUNT_MIN*k;
 	}
 	
 	//打折优惠金额
