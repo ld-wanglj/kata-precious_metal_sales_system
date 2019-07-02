@@ -46,4 +46,8 @@ public class OrderAppTest {
         return file.getAbsolutePath();
     }
 
+    @Test
+    public void should_checkout_orderAmt(){
+    	
+    }
 }
