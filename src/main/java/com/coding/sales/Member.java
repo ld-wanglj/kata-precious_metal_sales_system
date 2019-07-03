@@ -1,9 +1,7 @@
 package com.coding.sales;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Member {
 
@@ -52,26 +50,26 @@ public class Member {
 		this.memberPoints = memberPoints;
 	}
 
-	public static List dataInit() {
-		List<Map<String,Member>> ls = new ArrayList<Map<String,Member>>();
-
+	static List<Member> memberList=new ArrayList<Member>();
+	static {
 		Member m1 = new Member("6236609999", "马丁", "普卡", 9860);
 		Member m2 = new Member("6630009999", "王立", "金卡", 48860);
 		Member m3 = new Member("8230009999", "李想", "白金卡", 98860);
 		Member m4 = new Member("9230009999", "张三", "钻石卡", 198860);
-		for (int i = 0; i < 4; i++) {
-			Map<String,Member> map = new HashMap<String,Member>();
-			if (i == 0) {
-				map.put("6236609999", m1);
-			} else if (i == 1) {
-				map.put("6630009999", m2);
-			}else if(i==2){
-				map.put("8230009999", m3);
-			}else if(i==3){
-				map.put("9230009999", m4);
+		memberList.add(m1);
+		memberList.add(m2);
+		memberList.add(m3);
+		memberList.add(m4);
+	}
+	
+	public static Member getMember(String memberId){
+		for(Member member:memberList){
+			if(member.getMemberId().equals(memberId)){
+				return member;
 			}
-			ls.add(map);
 		}
-		return ls;
+		return null;
+	}
+	public Member(){
 	}
 }

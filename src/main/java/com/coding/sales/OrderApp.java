@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
@@ -57,30 +55,20 @@ public class OrderApp {
 		return result;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public OrderRepresentation getOrderRepresentation(OrderCommand command)
 			throws ParseException {
-		String orderId = command.getOrderId();
-		List memberList = Member.dataInit();
-		List productList = Product.dataInit();
+//		String orderId = command.getOrderId();
 		List orderProducts = command.getItems();// 购买的产品列表
 		List discounts = command.getDiscounts();// 存在的优惠券列表
 		List pList = command.getPayments();
 		String memberId = command.getMemberId();
-		Member member = null;
-		for (int i = 0; i < memberList.size(); i++) {
-			Map m = (Map) memberList.get(i);
-			member = (Member) m.get(memberId);
-			if (member != null) {
-				break;
-			}
-		}
+		Member member = Member.getMember(memberId);
 		String oldMemberType = member.getMemberType();
-		List printList = new ArrayList();
 		List itemsList = new ArrayList();
 		List printDiscounts = new ArrayList();
 		List paymentList = new ArrayList();
 		List discountList = new ArrayList();
-		Map printMap = new HashMap();
 		double totalAmt = 0.00;// 总金额
 		double discountAmt = 0.00;// 优惠金额
 		double endAmt = 0.00;// 实际支付金额
@@ -90,14 +78,7 @@ public class OrderApp {
 			String productId = orderItem.getProduct();
 			BigDecimal amt = orderItem.getAmount();
 			double amtDou = amt.doubleValue();
-			Product product = null;
-			for (int j = 0; j < productList.size(); j++) {
-				Map m = (Map) productList.get(j);
-				product = (Product) m.get(productId);
-				if (product != null) {
-					break;
-				}
-			}
+			Product product = Product.getProduct(productId);
 			double discountAmt1 = 0.00;
 			double discountAmt2 = 0.00;
 			double price = product.getPrice();// 产品单价
@@ -177,9 +158,9 @@ public class OrderApp {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		endAmt = totalAmt - discountAmt;
 		int points = member.getMemberPoints();
-		member.setMemberPoints(computingIntegral(endAmt,
+		member.setMemberPoints(PointsRule.computingIntegral(endAmt,
 				member.getMemberType(), points));
-		member.setMemberType(computingLevle(member.getMemberPoints()));
+		member.setMemberType(PointsRule.computingLevle(member.getMemberPoints()));
 		return new OrderRepresentation(command.getOrderId(),
 				formatter.parse(command.getCreateTime()),
 				command.getMemberId(), member.getMemberName(), oldMemberType,
@@ -190,34 +171,5 @@ public class OrderApp {
 
 	}
 
-	// 计算积分
-	public static int computingIntegral(double acountMoney, String level,
-			int oldIntegral) {
-		int toalIntegral = 0;
-		int newIntegral = 0;
-		newIntegral = (int) Math.floor(acountMoney);
-		if ("普卡".equals(level)) {
-			toalIntegral = oldIntegral + newIntegral;
-		} else if ("金卡".equals(level)) {
-			toalIntegral = (int) Math.floor(oldIntegral + newIntegral * 1.5);
-		} else if ("白金卡".equals(level)) {
-			toalIntegral = (int) Math.floor(oldIntegral + newIntegral * 1.8);
-		} else if ("钻石卡".equals(level)) {
-			toalIntegral = oldIntegral + newIntegral * 2;
-		}
-		return toalIntegral;
-	}
-
-	// 计算等级
-	public static String computingLevle(int toalIntegral) {
-		String level = "普卡";
-		if (toalIntegral >= 100000) {
-			level = "钻石卡";
-		} else if (toalIntegral >= 50000) {
-			level = "白金卡";
-		} else if (toalIntegral >= 10000) {
-			level = "金卡";
-		}
-		return level;
-	}
+	
 }
